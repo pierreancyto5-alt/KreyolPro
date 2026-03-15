@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KreyolPro — Pwodwi Dijital & Otomatizasyon Haiti</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #03050a;
+  --surface: #080d18;
+  --card: #0e1628;
+  --border: rgba(99,179,237,0.1);
+  --purple: #7c3aed;
+  --violet: #8b5cf6;
+  --pink: #ec4899;
+  --cyan: #22d3ee;
+  --green: #10b981;
+  --gold: #f59e0b;
+  --white: #f0f4ff;
+  --gray: #4a5568;
+  --light: #a0aec0;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ANIMATED BG */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(124,58,237,0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 85%, rgba(236,72,153,0.08) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(34,211,238,0.04) 0%, transparent 60%);
+  pointer-events:none; z-index:0;
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgPulse {
+  from { opacity:0.6; }
+  to { opacity:1; }
+}
+
+/* GRID */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none; z-index:0;
+}
+
+/* HEADER */
+header {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0.9rem 2rem;
+  background:rgba(3,5,10,0.85);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+
+.logo {
+  font-family:'Outfit', sans-serif;
+  font-size:1.4rem; font-weight:700;
+  letter-spacing:-0.02em;
+}
+.logo .l1 { color:var(--violet); }
+.logo .l2 { color:var(--cyan); }
+.logo small {
+  display:block;
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.38rem; letter-spacing:0.25em;
+  color:var(--gray); font-weight:400;
+  text-transform:uppercase; margin-top:-2px;
+}
+
+nav { display:flex; gap:1.8rem; }
+nav a {
+  font-size:0.82rem; font-weight:500;
+  color:var(--light); text-decoration:none;
+  cursor:pointer; transition:color 0.2s;
+  letter-spacing:0.02em;
+}
+nav a:hover, nav a.active { color:var(--white); }
+
+.hbtns { display:flex; gap:0.6rem; align-items:center; }
+.btn-sm {
+  padding:0.45rem 1rem; border-radius:6px;
+  font-family:'Outfit',sans-serif; font-size:0.8rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s; border:none;
+}
+.btn-sm-ghost {
+  background:transparent; border:1px solid var(--border); color:var(--light);
+}
+.btn-sm-ghost:hover { border-color:var(--violet); color:var(--white); }
+.btn-sm-glow {
+  background:linear-gradient(135deg, var(--purple), var(--violet));
+  color:var(--white);
+  box-shadow:0 0 20px rgba(124,58,237,0.3);
+}
+.btn-sm-glow:hover { box-shadow:0 0 30px rgba(124,58,237,0.5); transform:translateY(-1px); }
+
+.hamburger {
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; cursor:pointer; padding:4px;
+}
+.hamburger span { width:22px; height:2px; background:var(--white); display:block; }
+
+.mobile-nav {
+  display:none; position:fixed; top:60px; left:0; right:0;
+  background:rgba(3,5,10,0.97); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  z-index:99; flex-direction:column; padding:0.5rem 0;
+}
+.mobile-nav.open { display:flex; }
+.mobile-nav a {
+  padding:0.9rem 2rem; font-size:0.95rem; font-weight:500;
+  color:var(--light); cursor:pointer; display:block;
+  border-left:2px solid transparent; transition:all 0.2s;
+}
+.mobile-nav a:hover { color:var(--white); border-left-color:var(--violet); background:rgba(124,58,237,0.05); }
+
+/* PAGES */
+.page { display:none; min-height:100vh; padding-top:65px; position:relative; z-index:1; }
+.page.active { display:block; }
+
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none}
+}
+
+/* ===== HOME ===== */
+#home {
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  min-height:100vh; padding-top:65px;
+  text-align:center; padding:65px 1.5rem 3rem;
+}
+
+.hero-pill {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  background:rgba(124,58,237,0.12);
+  border:1px solid rgba(124,58,237,0.25);
+  border-radius:30px; padding:0.3rem 1rem;
+  font-size:0.72rem; font-family:'JetBrains Mono',monospace;
+  color:var(--violet); letter-spacing:0.08em;
+  margin-bottom:1.5rem;
+  animation:fadeUp 0.6s ease both;
+}
+.pill-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-h1 {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(2.5rem,8vw,6rem);
+  font-weight:800; line-height:1.05;
+  letter-spacing:-0.03em;
+  animation:fadeUp 0.6s 0.1s ease both;
+  margin-bottom:0.5rem;
+}
+.hero-h1 .grd {
+  background:linear-gradient(135deg, var(--violet), var(--pink), var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-p {
+  font-size:clamp(0.95rem,2vw,1.2rem);
+  font-weight:300; color:var(--light);
+  max-width:580px; line-height:1.7;
+  margin:1rem auto 2rem;
+  animation:fadeUp 0.6s 0.2s ease both;
+}
+
+.hero-btns {
+  display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+  animation:fadeUp 0.6s 0.3s ease both;
+  margin-bottom:3rem;
+}
+.btn-hero-main {
+  background:linear-gradient(135deg, var(--purple), var(--violet));
+  color:var(--white); border:none;
+  padding:0.9rem 2rem; border-radius:8px;
+  font-family:'Outfit',sans-serif; font-size:1rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+  box-shadow:0 0 30px rgba(124,58,237,0.3);
+}
+.btn-hero-main:hover { transform:translateY(-2px); box-shadow:0 0 40px rgba(124,58,237,0.5); }
+.btn-hero-sec {
+  background:transparent; border:1px solid var(--border);
+  color:var(--light); padding:0.9rem 2rem; border-radius:8px;
+  font-family:'Outfit',sans-serif; font-size:1rem; font-weight:500;
+  cursor:pointer; transition:all 0.2s;
+}
+.btn-hero-sec:hover { border-color:var(--violet); color:var(--white); }
+
+/* FLOATING CARDS */
+.floating-cards {
+  display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+  margin-bottom:3rem;
+  animation:fadeUp 0.6s 0.4s ease both;
+}
+.float-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px; padding:1rem 1.5rem;
+  display:flex; align-items:center; gap:0.8rem;
+  transition:all 0.3s;
+}
+.float-card:hover { border-color:var(--violet); transform:translateY(-3px); box-shadow:0 10px 30px rgba(124,58,237,0.2); }
+.fc-icon { font-size:1.5rem; }
+.fc-info { text-align:left; }
+.fc-val { font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700; color:var(--white); }
+.fc-lbl { font-size:0.68rem; color:var(--light); text-transform:uppercase; letter-spacing:0.1em; margin-top:1px; }
+
+/* TRAFFIC TICKER */
+.traffic-bar {
+  background:linear-gradient(90deg, rgba(124,58,237,0.15), rgba(236,72,153,0.1));
+  border:1px solid rgba(124,58,237,0.2);
+  border-radius:8px; padding:0.6rem 1.5rem;
+  display:flex; align-items:center; gap:1rem;
+  max-width:700px; margin:0 auto;
+  animation:fadeUp 0.6s 0.5s ease both;
+  overflow:hidden;
+}
+.tb-label {
+  font-size:0.65rem; font-family:'JetBrains Mono',monospace;
+  color:var(--violet); text-transform:uppercase; letter-spacing:0.15em;
+  flex-shrink:0;
+}
+.tb-scroll {
+  display:flex; gap:3rem; animation:scroll 15s linear infinite;
+  white-space:nowrap;
+}
+.tb-item { font-size:0.75rem; color:var(--light); flex-shrink:0; }
+.tb-item span { color:var(--green); }
+@keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ===== SECTION SHARED ===== */
+.sec-wrap { max-width:1100px; margin:0 auto; padding:3rem 1.5rem; }
+.sec-eyebrow {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem; letter-spacing:0.3em;
+  color:var(--violet); text-transform:uppercase; margin-bottom:0.7rem;
+}
+.sec-h2 {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(1.8rem,4vw,3rem); font-weight:800;
+  letter-spacing:-0.02em; margin-bottom:0.5rem;
+}
+.sec-h2 span { color:var(--cyan); }
+.sec-p { color:var(--light); font-size:0.95rem; line-height:1.7; max-width:520px; }
+
+/* ===== BOUTIK ===== */
+#boutik { padding-top:65px; }
+
+.boutik-tabs {
+  display:flex; gap:0; margin:1.5rem 0;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:8px; padding:4px; width:fit-content;
+}
+.tab-btn {
+  padding:0.5rem 1.2rem; border:none; border-radius:6px;
+  font-family:'Outfit',sans-serif; font-size:0.82rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s; background:transparent; color:var(--light);
+}
+.tab-btn.active { background:linear-gradient(135deg, var(--purple), var(--violet)); color:var(--white); }
+
+.products-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+  gap:1px; background:var(--border);
+  border:1px solid var(--border); margin-top:0.5rem;
+}
+.prod-card {
+  background:var(--card); padding:1.8rem;
+  position:relative; overflow:hidden; cursor:pointer;
+  transition:background 0.2s;
+}
+.prod-card:hover { background:#111e35; }
+.prod-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--purple), var(--cyan));
+  transform:scaleX(0); transform-origin:left; transition:transform 0.3s;
+}
+.prod-card:hover::before { transform:scaleX(1); }
+
+.prod-tag {
+  display:inline-block;
+  font-size:0.58rem; font-family:'JetBrains Mono',monospace;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:0.2rem 0.6rem; border-radius:3px; margin-bottom:1rem;
+}
+.tag-ebook { background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:var(--violet); }
+.tag-cours { background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.2); color:var(--cyan); }
+.tag-template { background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.2); color:var(--pink); }
+.tag-hot { background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); color:var(--gold); }
+
+.prod-icon { font-size:2.2rem; margin-bottom:0.8rem; }
+.prod-title { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+.prod-desc { font-size:0.82rem; color:var(--light); line-height:1.6; margin-bottom:1rem; }
+.prod-footer { display:flex; align-items:center; justify-content:space-between; }
+.prod-price { font-family:'JetBrains Mono',monospace; font-size:1rem; font-weight:500; color:var(--cyan); }
+.prod-buy {
+  background:linear-gradient(135deg, var(--purple), var(--violet));
+  color:var(--white); border:none; padding:0.4rem 0.9rem;
+  border-radius:5px; font-size:0.78rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s; font-family:'Outfit',sans-serif;
+}
+.prod-buy:hover { opacity:0.85; transform:translateY(-1px); }
+.prod-stars { font-size:0.72rem; color:var(--gold); margin-top:0.4rem; }
+
+/* ===== AUTOMATISATION ===== */
+#auto { padding-top:65px; }
+
+.auto-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:1rem; margin-top:2rem;
+}
+.auto-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:1.8rem; position:relative;
+  overflow:hidden; transition:all 0.3s;
+}
+.auto-card:hover {
+  border-color:rgba(124,58,237,0.4);
+  box-shadow:0 8px 30px rgba(124,58,237,0.15);
+  transform:translateY(-3px);
+}
+.auto-card::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(124,58,237,0.03), transparent);
+  pointer-events:none;
+}
+.ac-num {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem; color:var(--violet);
+  letter-spacing:0.2em; margin-bottom:1rem;
+}
+.ac-icon { font-size:2rem; margin-bottom:0.8rem; }
+.ac-title { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+.ac-desc { font-size:0.83rem; color:var(--light); line-height:1.6; }
+.ac-badge {
+  display:inline-block; margin-top:0.8rem;
+  background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2);
+  color:var(--green); font-size:0.6rem; font-family:'JetBrains Mono',monospace;
+  letter-spacing:0.15em; text-transform:uppercase; padding:0.2rem 0.5rem; border-radius:3px;
+}
+
+/* FLOW DIAGRAM */
+.flow-diagram {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:2rem; margin-top:2rem;
+  text-align:center;
+}
+.flow-title { font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:1.5rem; }
+.flow-steps {
+  display:flex; align-items:center; justify-content:center;
+  flex-wrap:wrap; gap:0.5rem;
+}
+.flow-step {
+  background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.2);
+  border-radius:8px; padding:0.7rem 1rem;
+  font-size:0.8rem; font-weight:500; min-width:120px;
+}
+.flow-step .fs-icon { font-size:1.2rem; margin-bottom:0.3rem; }
+.flow-arrow { color:var(--violet); font-size:1.2rem; flex-shrink:0; }
+.flow-result {
+  background:linear-gradient(135deg, rgba(16,185,129,0.15), rgba(34,211,238,0.1));
+  border:1px solid rgba(16,185,129,0.3);
+  border-radius:8px; padding:0.7rem 1.5rem;
+  color:var(--green); font-weight:700; font-size:0.9rem; margin-top:1rem;
+}
+
+/* ===== TRAFIK ===== */
+#trafik { padding-top:65px; }
+
+.trafik-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2rem;
+}
+@media(max-width:700px){ .trafik-grid{ grid-template-columns:1fr; } }
+
+.trafik-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:1.8rem;
+}
+.tk-header { display:flex; align-items:center; gap:0.8rem; margin-bottom:1.2rem; }
+.tk-icon {
+  width:44px; height:44px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; background:rgba(124,58,237,0.12);
+  border:1px solid rgba(124,58,237,0.2);
+}
+.tk-title { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; }
+.tk-sub { font-size:0.75rem; color:var(--light); }
+.tk-steps { list-style:none; }
+.tk-steps li {
+  display:flex; align-items:flex-start; gap:0.6rem;
+  padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.04);
+  font-size:0.83rem; color:var(--light); line-height:1.5;
+}
+.tk-steps li:last-child { border-bottom:none; }
+.tk-steps li::before { content:'→'; color:var(--violet); flex-shrink:0; margin-top:1px; }
+.tk-potential {
+  margin-top:1rem; padding:0.7rem;
+  background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2);
+  border-radius:6px; font-size:0.8rem; color:var(--green); font-weight:600;
+}
+
+/* ===== DASHBOARD ===== */
+#dashboard { padding-top:65px; }
+
+.dash-kpis {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:1px; background:var(--border); border:1px solid var(--border);
+  margin-bottom:1.5rem;
+}
+.kpi { background:var(--card); padding:1.5rem; }
+.kpi-val {
+  font-family:'Outfit',sans-serif; font-size:1.9rem; font-weight:800;
+  background:linear-gradient(135deg, var(--violet), var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.kpi-lbl { font-size:0.65rem; color:var(--gray); text-transform:uppercase; letter-spacing:0.15em; font-family:'JetBrains Mono',monospace; margin-top:0.3rem; }
+.kpi-trend { font-size:0.75rem; color:var(--green); margin-top:0.3rem; }
+
+.sales-list {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; overflow:hidden; margin-bottom:1.5rem;
+}
+.sl-header {
+  padding:1rem 1.5rem; border-bottom:1px solid var(--border);
+  font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:700;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.sl-live {
+  font-size:0.65rem; font-family:'JetBrains Mono',monospace;
+  color:var(--green); display:flex; align-items:center; gap:0.3rem;
+}
+.sl-live::before { content:''; width:5px; height:5px; background:var(--green); border-radius:50%; animation:blink 1.5s infinite; }
+.sale-row {
+  display:flex; align-items:center; gap:1rem; padding:0.85rem 1.5rem;
+  border-bottom:1px solid rgba(255,255,255,0.03); transition:background 0.2s;
+}
+.sale-row:hover { background:rgba(255,255,255,0.02); }
+.sale-row:last-child { border-bottom:none; }
+.sale-ico {
+  width:36px; height:36px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0;
+}
+.s-purple { background:rgba(124,58,237,0.15); }
+.s-cyan { background:rgba(34,211,238,0.1); }
+.s-pink { background:rgba(236,72,153,0.1); }
+.s-gold { background:rgba(245,158,11,0.1); }
+.sale-info { flex:1; }
+.sale-name { font-size:0.88rem; font-weight:500; }
+.sale-date { font-size:0.68rem; color:var(--gray); font-family:'JetBrains Mono',monospace; margin-top:2px; }
+.sale-amt { font-family:'JetBrains Mono',monospace; font-size:0.88rem; color:var(--green); font-weight:500; }
+
+/* EARNINGS CHART */
+.earnings-chart {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:1.5rem;
+}
+.ec-title { font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:700; margin-bottom:1.2rem; }
+.bar-wrap { display:flex; align-items:flex-end; gap:0.4rem; height:100px; }
+.ec-bar {
+  flex:1; border-radius:4px 4px 0 0; min-width:18px;
+  background:linear-gradient(to top, var(--purple), var(--violet));
+  transition:opacity 0.2s;
+}
+.ec-bar:hover { opacity:0.75; }
+.ec-labels { display:flex; gap:0.4rem; margin-top:0.4rem; }
+.ec-lbl { flex:1; text-align:center; font-size:0.58rem; color:var(--gray); font-family:'JetBrains Mono',monospace; min-width:18px; }
+
+/* CHATBOT */
+#chat-btn {
+  position:fixed; bottom:2rem; right:2rem;
+  width:54px; height:54px; border-radius:50%;
+  background:linear-gradient(135deg, var(--purple), var(--violet));
+  border:none; cursor:pointer; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem;
+  box-shadow:0 4px 20px rgba(124,58,237,0.5);
+  transition:transform 0.2s;
+}
+#chat-btn:hover { transform:scale(1.1); }
+
+#chat-win {
+  position:fixed; bottom:5.5rem; right:2rem;
+  width:min(360px, calc(100vw - 2rem)); height:490px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; z-index:199;
+  display:none; flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(124,58,237,0.1);
+  overflow:hidden;
+}
+#chat-win.open { display:flex; }
+
+.ch-head {
+  background:linear-gradient(135deg, #3b0764, #4c1d95);
+  padding:1rem 1.2rem;
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.ch-info { display:flex; align-items:center; gap:0.7rem; }
+.ch-av {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,0.15);
+  display:flex; align-items:center; justify-content:center; font-size:1rem;
+}
+.ch-name { font-family:'Outfit',sans-serif; font-size:0.88rem; font-weight:700; }
+.ch-status { font-size:0.6rem; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:0.3rem; }
+.ch-status::before { content:''; width:5px; height:5px; background:var(--green); border-radius:50%; }
+.ch-x { background:none; border:none; color:rgba(255,255,255,0.5); cursor:pointer; font-size:1.1rem; }
+.ch-x:hover { color:white; }
+
+.ch-msgs {
+  flex:1; overflow-y:auto; padding:1rem;
+  display:flex; flex-direction:column; gap:0.7rem;
+  scrollbar-width:thin; scrollbar-color:var(--card) transparent;
+}
+.cm { max-width:85%; padding:0.65rem 0.9rem; font-size:0.83rem; line-height:1.5; border-radius:12px; animation:msgIn 0.2s ease; }
+@keyframes msgIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.cm.bot { background:var(--card); border:1px solid var(--border); align-self:flex-start; border-radius:4px 12px 12px 12px; }
+.cm.user { background:linear-gradient(135deg, var(--purple), var(--violet)); align-self:flex-end; border-radius:12px 4px 12px 12px; }
+.cm-time { font-size:0.57rem; color:var(--gray); margin-top:0.25rem; font-family:'JetBrains Mono',monospace; }
+
+.ch-quick { display:flex; gap:0.4rem; flex-wrap:wrap; padding:0.5rem 1rem 0; flex-shrink:0; }
+.cq {
+  background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.2);
+  color:var(--light); padding:0.25rem 0.6rem; border-radius:12px;
+  font-size:0.68rem; cursor:pointer; transition:all 0.2s; font-family:'Outfit',sans-serif;
+}
+.cq:hover { background:var(--violet); color:white; border-color:var(--violet); }
+
+.ch-inp-area { display:flex; border-top:1px solid var(--border); flex-shrink:0; }
+#ch-inp {
+  flex:1; background:transparent; border:none; color:var(--white);
+  padding:0.85rem 1rem; font-family:'Outfit',sans-serif; font-size:0.88rem; outline:none;
+}
+#ch-inp::placeholder { color:var(--gray); }
+#ch-send {
+  background:linear-gradient(135deg, var(--purple), var(--violet));
+  border:none; color:white; padding:0 1.1rem; cursor:pointer; font-size:1rem; flex-shrink:0;
+}
+
+.typing { display:flex; align-items:center; gap:4px; padding:0.5rem; }
+.td { width:5px; height:5px; background:var(--violet); border-radius:50%; animation:tb 1.2s infinite; }
+.td:nth-child(2){animation-delay:0.2s} .td:nth-child(3){animation-delay:0.4s}
+@keyframes tb { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+/* MODAL */
+.modal-ov {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85);
+  z-index:400; display:none; align-items:center; justify-content:center;
+}
+.modal-ov.open { display:flex; }
+.modal {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; max-width:440px; width:90%;
+  padding:2rem; animation:fadeUp 0.3s ease;
+}
+.modal h3 { font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:800; margin-bottom:0.5rem; }
+.modal h3 span { color:var(--violet); }
+.modal p { color:var(--light); font-size:0.88rem; line-height:1.6; margin-bottom:1.2rem; }
+.modal-close { float:right; background:none; border:none; color:var(--gray); cursor:pointer; font-size:1.3rem; }
+.modal-close:hover { color:var(--white); }
+.fi { margin-bottom:1rem; }
+.fl { display:block; font-size:0.65rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray); margin-bottom:0.4rem; font-family:'JetBrains Mono',monospace; }
+.finp {
+  width:100%; background:var(--card); border:1px solid var(--border); border-radius:6px;
+  color:var(--white); padding:0.65rem 0.85rem; font-family:'Outfit',sans-serif;
+  font-size:0.88rem; outline:none; transition:border-color 0.2s;
+}
+.finp:focus { border-color:var(--violet); }
+.modal-btn {
+  width:100%; background:linear-gradient(135deg, var(--purple), var(--violet));
+  color:var(--white); border:none; padding:0.85rem; border-radius:8px;
+  font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:600;
+  cursor:pointer; margin-top:0.5rem; transition:all 0.2s;
+}
+.modal-btn:hover { opacity:0.9; transform:translateY(-1px); }
+
+/* NOTIF */
+.notif {
+  position:fixed; top:4rem; right:1rem;
+  background:var(--card); border:1px solid var(--border);
+  border-left:3px solid var(--green); border-radius:8px;
+  padding:0.75rem 1.1rem; max-width:280px; z-index:300;
+  font-size:0.82rem;
+  animation:slideIn 0.3s ease, fadeOut2 0.3s 2.7s both;
+}
+@keyframes slideIn { from{transform:translateX(110%);opacity:0} to{transform:none;opacity:1} }
+@keyframes fadeOut2 { to{opacity:0;transform:translateX(110%)} }
+
+footer {
+  background:var(--surface); border-top:1px solid var(--border);
+  padding:2rem; text-align:center; position:relative; z-index:1;
+}
+footer .fl-logo { font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700; margin-bottom:0.5rem; }
+footer p { font-size:0.72rem; color:var(--gray); font-family:'JetBrains Mono',monospace; }
+
+@media(max-width:600px){
+  nav { display:none; }
+  .hamburger { display:flex; }
+  .hbtns { display:none; }
+  .floating-cards { flex-direction:column; align-items:center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="l1">Ayiti</span><span class="l2">Learn</span>
+    <small>Pwodwi Dijital · Otomatizasyon · Haiti 🇭🇹</small>
+  </div>
+  <nav>
+    <a onclick="showPage('home')" class="active" id="nav-home">Akèy</a>
+    <a onclick="showPage('boutik')" id="nav-boutik">Boutik</a>
+    <a onclick="showPage('auto')" id="nav-auto">Otomatizasyon</a>
+    <a onclick="showPage('trafik')" id="nav-trafik">Trafik</a>
+    <a onclick="showPage('dashboard')" id="nav-dashboard">Dashboard</a>
+  </nav>
+  <div class="hbtns">
+    <button class="btn-sm btn-sm-ghost" onclick="openModal('login')">Konekte</button>
+    <button class="btn-sm btn-sm-glow" onclick="openModal('register')">Kòmanse Gratis</button>
+  </div>
+  <button class="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a onclick="showPage('home');closeMobileNav()">🏠 Akèy</a>
+  <a onclick="showPage('boutik');closeMobileNav()">🛒 Boutik</a>
+  <a onclick="showPage('auto');closeMobileNav()">🤖 Otomatizasyon</a>
+  <a onclick="showPage('trafik');closeMobileNav()">📈 Trafik</a>
+  <a onclick="showPage('dashboard');closeMobileNav()">📊 Dashboard</a>
+</div>
+
+<!-- HOME -->
+<section id="home" class="page active" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <div class="hero-pill">
+    <div class="pill-dot"></div>
+    Platfòm #1 Biznis Dijital Ayiti
+  </div>
+
+  <h1 class="hero-h1">
+    Fè Lajan<br>
+    <span class="grd">Pandan Ou Dòmi</span>
+  </h1>
+
+  <p class="hero-p">
+    Vann ebook, cours ak templates anliy. Sistèm otomatik jere tout bagay — ou dòmi, lajan ap rantre pou timoun ou ak fanmi ou. 🇭🇹
+  </p>
+
+  <div class="hero-btns">
+    <button class="btn-hero-main" onclick="showPage('boutik')">🚀 Wè Boutik la</button>
+    <button class="btn-hero-sec" onclick="showPage('auto')">🤖 Wè Otomatizasyon</button>
+  </div>
+
+  <div class="floating-cards">
+    <div class="float-card">
+      <div class="fc-icon">📚</div>
+      <div class="fc-info">
+        <div class="fc-val">15+</div>
+        <div class="fc-lbl">Pwodwi Dijital</div>
+      </div>
+    </div>
+    <div class="float-card">
+      <div class="fc-icon">💰</div>
+      <div class="fc-info">
+        <div class="fc-val">150K HTG</div>
+        <div class="fc-lbl">Revni Mwa Sa</div>
+      </div>
+    </div>
+    <div class="float-card">
+      <div class="fc-icon">🤖</div>
+      <div class="fc-info">
+        <div class="fc-val">100%</div>
+        <div class="fc-lbl">Otomatik</div>
+      </div>
+    </div>
+    <div class="float-card">
+      <div class="fc-icon">👥</div>
+      <div class="fc-info">
+        <div class="fc-val">1,200+</div>
+        <div class="fc-lbl">Kliyan Satisfè</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="traffic-bar">
+    <span class="tb-label">🔴 LIVE</span>
+    <div class="tb-scroll">
+      <span class="tb-item">Marie P. achte Ebook Biznis — <span>+2,000 HTG</span></span>
+      <span class="tb-item">Jean M. achte Cours Marketing — <span>+3,500 HTG</span></span>
+      <span class="tb-item">Rose B. achte Pack Templates — <span>+1,500 HTG</span></span>
+      <span class="tb-item">Claude D. achte Cours AI — <span>+4,000 HTG</span></span>
+      <span class="tb-item">Marie P. achte Ebook Biznis — <span>+2,000 HTG</span></span>
+      <span class="tb-item">Jean M. achte Cours Marketing — <span>+3,500 HTG</span></span>
+      <span class="tb-item">Rose B. achte Pack Templates — <span>+1,500 HTG</span></span>
+      <span class="tb-item">Claude D. achte Cours AI — <span>+4,000 HTG</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- BOUTIK -->
+<section id="boutik" class="page" style="display:none">
+  <div class="sec-wrap">
+    <p class="sec-eyebrow">// Boutik Dijital</p>
+    <h2 class="sec-h2">Tout <span>Pwodwi</span> yo</h2>
+    <p class="sec-p">Ebook, cours anliy ak templates pwofesyonèl — telechaje imedyatman apre peman.</p>
+
+    <div class="boutik-tabs">
+      <button class="tab-btn active" onclick="filterProds('all',this)">Tout</button>
+      <button class="tab-btn" onclick="filterProds('ebook',this)">Ebook</button>
+      <button class="tab-btn" onclick="filterProds('cours',this)">Cours</button>
+      <button class="tab-btn" onclick="filterProds('template',this)">Templates</button>
+    </div>
+
+    <div class="products-grid" id="prodsGrid"></div>
+  </div>
+</section>
+
+<!-- AUTOMATISATION -->
+<section id="auto" class="page" style="display:none">
+  <div class="sec-wrap">
+    <p class="sec-eyebrow">// Otomatizasyon</p>
+    <h2 class="sec-h2">Sistèm <span>Otomatik</span></h2>
+    <p class="sec-p">Platfòm nan jere tout bagay otomatikman — ou travay yon fwa, lajan ap rantre pou toujou.</p>
+
+    <div class="auto-grid">
+      <div class="auto-card">
+        <div class="ac-num">01 / OTOMATIZASYON</div>
+        <div class="ac-icon">💳</div>
+        <div class="ac-title">Peman Otomatik</div>
+        <div class="ac-desc">Kliyan peye via MonCash — sistèm nan konfime epi livè aksè imedyatman. Pa bezwen fè anyen manyèlman.</div>
+        <div class="ac-badge">✓ AKTIF</div>
+      </div>
+      <div class="auto-card">
+        <div class="ac-num">02 / OTOMATIZASYON</div>
+        <div class="ac-icon">📧</div>
+        <div class="ac-title">Livrezon Otomatik</div>
+        <div class="ac-desc">Apre peman konfime — sistèm voye lyen download oswa aksè dirèkteman bay kliyan via WhatsApp ak email.</div>
+        <div class="ac-badge">✓ AKTIF</div>
+      </div>
+      <div class="auto-card">
+        <div class="ac-num">03 / OTOMATIZASYON</div>
+        <div class="ac-icon">🤖</div>
+        <div class="ac-title">Chatbot AI 24/7</div>
+        <div class="ac-desc">Chatbot reponn tout kesyon kliyan yo otomatikman — an Kreyòl, Français, English — menm lè ou dòmi.</div>
+        <div class="ac-badge">✓ AI POWERED</div>
+      </div>
+      <div class="auto-card">
+        <div class="ac-num">04 / OTOMATIZASYON</div>
+        <div class="ac-icon">📱</div>
+        <div class="ac-title">Marketing Otomatik</div>
+        <div class="ac-desc">Post otomatik sou Facebook ak WhatsApp chak jou. Pwomosyon pwodwi yo san ou pa fè efò.</div>
+        <div class="ac-badge">✓ SCHEDULE</div>
+      </div>
+      <div class="auto-card">
+        <div class="ac-num">05 / OTOMATIZASYON</div>
+        <div class="ac-icon">📊</div>
+        <div class="ac-title">Rapò Otomatik</div>
+        <div class="ac-desc">Dashboard an tan rèl — wè tout vant, revni, ak kliyan yo chak jou san fè anyen manyèlman.</div>
+        <div class="ac-badge">✓ REAL-TIME</div>
+      </div>
+      <div class="auto-card">
+        <div class="ac-num">06 / OTOMATIZASYON</div>
+        <div class="ac-icon">🔄</div>
+        <div class="ac-title">Upsell Otomatik</div>
+        <div class="ac-desc">Apre chak acha — sistèm rekòmande pwodwi ki plis vann otomatikman pou maksimize revni ou.</div>
+        <div class="ac-badge">✓ SMART</div>
+      </div>
+    </div>
+
+    <div class="flow-diagram">
+      <div class="flow-title">⚡ Kijan Sistèm nan Travay Otomatikman</div>
+      <div class="flow-steps">
+        <div class="flow-step"><div class="fs-icon">👤</div>Kliyan Vini</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">🛒</div>Li Chwazi Pwodwi</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">💳</div>Li Peye MonCash</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">⚡</div>Sistèm Konfime</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">📲</div>Aksè Livere</div>
+      </div>
+      <div class="flow-result">💰 Ou Dòmi — Lajan Rantre Otomatik!</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAFIK -->
+<section id="trafik" class="page" style="display:none">
+  <div class="sec-wrap">
+    <p class="sec-eyebrow">// Estrateji Trafik</p>
+    <h2 class="sec-h2">Atire <span>Kliyan</span> Gratis</h2>
+    <p class="sec-p">Estrateji pou jwenn trafik gratis — plis vizitè = plis vant = plis lajan pou fanmi ou.</p>
+
+    <div class="trafik-grid">
+      <div class="trafik-card">
+        <div class="tk-header">
+          <div class="tk-icon">📘</div>
+          <div>
+            <div class="tk-title">Facebook Gratis</div>
+            <div class="tk-sub">Platfòm #1 Ayiti</div>
+          </div>
+        </div>
+        <ul class="tk-steps">
+          <li>Kreye yon paj Facebook "KreyolPro"</li>
+          <li>Poste kontni gratis chak jou (tips biznis, motivasyon)</li>
+          <li>Mete lyen platfòm nan nan chak post</li>
+          <li>Antre nan gwoup biznis Ayiti sou Facebook</li>
+          <li>Pataje pwodwi yo chak semèn</li>
+        </ul>
+        <div class="tk-potential">📈 Potansyèl: 500-2,000 vizitè/mwa gratis</div>
+      </div>
+
+      <div class="trafik-card">
+        <div class="tk-header">
+          <div class="tk-icon">📱</div>
+          <div>
+            <div class="tk-title">WhatsApp Marketing</div>
+            <div class="tk-sub">Pi efektif Ayiti</div>
+          </div>
+        </div>
+        <ul class="tk-steps">
+          <li>Kreye yon gwoup WhatsApp "KreyolPro VIP"</li>
+          <li>Envite 50-100 moun chak semèn</li>
+          <li>Voye ofèt espesyal chak mwa</li>
+          <li>Pataje tips gratis pou bati konfyans</li>
+          <li>Fè promo "2 pou 1" pou pouse vant</li>
+        </ul>
+        <div class="tk-potential">📈 Potansyèl: 200-500 kliyan/mwa</div>
+      </div>
+
+      <div class="trafik-card">
+        <div class="tk-header">
+          <div class="tk-icon">🎵</div>
+          <div>
+            <div class="tk-title">TikTok Viral</div>
+            <div class="tk-sub">Jèn ayisyen yo la</div>
+          </div>
+        </div>
+        <ul class="tk-steps">
+          <li>Fè videyo kout sou "Kijan fè lajan enlign"</li>
+          <li>Montre rezilta rèl — screenshot vant yo</li>
+          <li>Mete lyen platfòm nan nan bio ou</li>
+          <li>Poste 1 videyo chak jou pou 30 jou</li>
+          <li>Itilize hashtags ayisyen popilè</li>
+        </ul>
+        <div class="tk-potential">📈 Potansyèl: 1,000-10,000 vizitè/mwa</div>
+      </div>
+
+      <div class="trafik-card">
+        <div class="tk-header">
+          <div class="tk-icon">🔍</div>
+          <div>
+            <div class="tk-title">SEO Google</div>
+            <div class="tk-sub">Trafik pou toujou</div>
+          </div>
+        </div>
+        <ul class="tk-steps">
+          <li>Ekri atik sou "biznis enlign Ayiti"</li>
+          <li>Mete mo-kle ayisyen nan tout paj yo</li>
+          <li>Kreye yon blog gratis sou platfòm nan</li>
+          <li>Pataje konsèy pratik pou biznis lokal</li>
+          <li>Google ap voye trafik gratis chak jou</li>
+        </ul>
+        <div class="tk-potential">📈 Potansyèl: 300-1,500 vizitè/mwa</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page" style="display:none">
+  <div class="sec-wrap">
+    <p class="sec-eyebrow">// Admin Dashboard</p>
+    <h2 class="sec-h2">Tableau de <span>Bord</span></h2>
+    <p class="sec-p">Tout statistik biznis ou an tan rèl — wè kwasans ou chak jou.</p>
+
+    <div class="dash-kpis">
+      <div class="kpi">
+        <div class="kpi-val">152K</div>
+        <div class="kpi-lbl">Revni HTG</div>
+        <div class="kpi-trend">↑ +23% mwa sa</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">1,204</div>
+        <div class="kpi-lbl">Kliyan Total</div>
+        <div class="kpi-trend">↑ +156 mwa sa</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">847</div>
+        <div class="kpi-lbl">Pwodwi Vann</div>
+        <div class="kpi-trend">↑ +89 mwa sa</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">15</div>
+        <div class="kpi-lbl">Pwodwi Aktif</div>
+        <div class="kpi-trend">↑ +3 nouvo</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">98%</div>
+        <div class="kpi-lbl">Satisfaksyon</div>
+        <div class="kpi-trend">↑ Ekselan</div>
+      </div>
+    </div>
+
+    <div class="earnings-chart">
+      <div class="ec-title">📈 Revni pa Mwa (HTG)</div>
+      <div class="bar-wrap" id="ecBars"></div>
+      <div class="ec-labels" id="ecLabels"></div>
+    </div>
+
+    <div class="sales-list" style="margin-top:1rem">
+      <div class="sl-header">
+        🛒 Dènye Vant yo
+        <span class="sl-live">LIVE</span>
+      </div>
+      <div class="sale-row">
+        <div class="sale-ico s-purple">📚</div>
+        <div class="sale-info">
+          <div class="sale-name">Ebook Biznis Enlign — Marie Pierre</div>
+          <div class="sale-date">2026-03-15 · 02:34</div>
+        </div>
+        <div class="sale-amt">+2,000 HTG</div>
+      </div>
+      <div class="sale-row">
+        <div class="sale-ico s-cyan">🎓</div>
+        <div class="sale-info">
+          <div class="sale-name">Cours Marketing Digital — Jean Michel</div>
+          <div class="sale-date">2026-03-15 · 01:58</div>
+        </div>
+        <div class="sale-amt">+3,500 HTG</div>
+      </div>
+      <div class="sale-row">
+        <div class="sale-ico s-pink">🎨</div>
+        <div class="sale-info">
+          <div class="sale-name">Pack Templates Flyer — Rose Bernard</div>
+          <div class="sale-date">2026-03-15 · 00:22</div>
+        </div>
+        <div class="sale-amt">+1,500 HTG</div>
+      </div>
+      <div class="sale-row">
+        <div class="sale-ico s-purple">🤖</div>
+        <div class="sale-info">
+          <div class="sale-name">Cours AI pou Biznis — Claude Dupont</div>
+          <div class="sale-date">2026-03-14 · 23:45</div>
+        </div>
+        <div class="sale-amt">+4,000 HTG</div>
+      </div>
+      <div class="sale-row">
+        <div class="sale-ico s-gold">💡</div>
+        <div class="sale-info">
+          <div class="sale-name">Ebook Trafik Gratis — Farah Thomas</div>
+          <div class="sale-date">2026-03-14 · 22:11</div>
+        </div>
+        <div class="sale-amt">+1,800 HTG</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHATBOT -->
+<button id="chat-btn" onclick="toggleChat()">🤖</button>
+<div id="chat-win">
+  <div class="ch-head">
+    <div class="ch-info">
+      <div class="ch-av">🤖</div>
+      <div>
+        <div class="ch-name">KreyolPro AI</div>
+        <div class="ch-status">Disponib 24/7</div>
+      </div>
+    </div>
+    <button class="ch-x" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="ch-msgs" id="chMsgs"></div>
+  <div class="ch-quick" id="chQuick"></div>
+  <div class="ch-inp-area">
+    <input type="text" id="ch-inp" placeholder="Poze kesyon ou..." onkeydown="if(event.key==='Enter') sendChat()">
+    <button id="ch-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-ov" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">✕</button>
+    <h3>Konekte sou <span>KreyolPro</span></h3>
+    <p>Aksede kont ou pou wè acha ou yo.</p>
+    <div class="fi"><label class="fl">WhatsApp</label><input class="finp" type="tel" placeholder="+509 ..."></div>
+    <div class="fi"><label class="fl">Modpas</label><input class="finp" type="password" placeholder="••••••••"></div>
+    <button class="modal-btn" onclick="submitLogin()">🔐 Konekte</button>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('register')">✕</button>
+    <h3>Kòmanse <span>Gratis</span></h3>
+    <p>Kreye kont ou — aksede tout pwodwi yo imedyatman apre acha.</p>
+    <div class="fi"><label class="fl">Non Konplè</label><input class="finp" type="text" placeholder="Jean Pierre..."></div>
+    <div class="fi"><label class="fl">WhatsApp</label><input class="finp" type="tel" placeholder="+509 ..."></div>
+    <div class="fi"><label class="fl">Modpas</label><input class="finp" type="password" placeholder="••••••••"></div>
+    <button class="modal-btn" onclick="submitRegister()">🚀 Kreye Kont Gratis</button>
+  </div>
+</div>
+
+<footer>
+  <div class="fl-logo"><span style="color:var(--violet)">Ayiti</span><span style="color:var(--cyan)">Learn</span></div>
+  <p>© 2026 KreyolPro · Pwodwi Dijital & Otomatizasyon · Haiti 🇭🇹</p>
+</footer>
+
+<script>
+// ===== DATA =====
+const products = [
+  { id:1, cat:'ebook', icon:'📚', tag:'ebook', title:'Gid Konplè Biznis Enlign Ayiti', desc:'Tout sa ou bezwen konnen pou kòmanse yon biznis anliy reyisi depi Ayiti. 80 paj, pratik 100%.', price:'2,000 HTG', stars:'★★★★★ (124)', hot:false },
+  { id:2, cat:'cours', icon:'🎓', tag:'cours', title:'Cours Marketing Digital Ayiti', desc:'Aprann atire kliyan sou Facebook, TikTok ak WhatsApp. 12 leson videyo + exercises.', price:'3,500 HTG', stars:'★★★★★ (89)', hot:true },
+  { id:3, cat:'template', icon:'🎨', tag:'template', title:'Pack 50 Templates Flyer', desc:'50 templates pwofesyonèl pou DJs, biznis ak evènman. Prèt pou itilize sou Canva.', price:'1,500 HTG', stars:'★★★★☆ (67)', hot:false },
+  { id:4, cat:'cours', icon:'🤖', tag:'cours', title:'Cours AI pou Biznis Ayiti', desc:'Itilize ChatGPT, Claude ak AI pou otomatize biznis ou. Pou debitè ak pwofesyonèl.', price:'4,000 HTG', stars:'★★★★★ (43)', hot:true },
+  { id:5, cat:'ebook', icon:'💡', tag:'ebook', title:'Ebook: Trafik Gratis Haiti', desc:'Estrateji pwouve pou jwenn 1,000+ vizitè chak mwa gratis sou Facebook, TikTok ak Google.', price:'1,800 HTG', stars:'★★★★★ (98)', hot:false },
+  { id:6, cat:'template', icon:'📱', tag:'template', title:'Pack Templates WhatsApp Business', desc:'30 templates mesaj pwofesyonèl pou WhatsApp Business. Voye nan 1 klik.', price:'800 HTG', stars:'★★★★☆ (52)', hot:false },
+  { id:7, cat:'cours', icon:'💰', tag:'cours', title:'Cours: Vann Pwodwi Dijital', desc:'Kreye ak vann ebook ak cours anliy depi zewo. Menm si ou pa gen eksperyans.', price:'2,500 HTG', stars:'★★★★★ (76)', hot:true },
+  { id:8, cat:'ebook', icon:'🏦', tag:'ebook', title:'Gid MonCash pou Biznis', desc:'Tout fonksyon MonCash pou biznis — peman, ranbousman, API. Senp ak pratik.', price:'1,200 HTG', stars:'★★★★☆ (38)', hot:false },
+];
+
+function renderProducts(filter='all') {
+  const grid = document.getElementById('prodsGrid');
+  const filtered = filter==='all' ? products : products.filter(p => p.cat===filter);
+  grid.innerHTML = filtered.map(p => `
+    <div class="prod-card">
+      ${p.hot ? '<div class="prod-tag tag-hot">🔥 HOT</div>' : `<div class="prod-tag tag-${p.tag}">${p.tag.toUpperCase()}</div>`}
+      <div class="prod-icon">${p.icon}</div>
+      <div class="prod-title">${p.title}</div>
+      <div class="prod-desc">${p.desc}</div>
+      <div class="prod-stars">${p.stars}</div>
+      <div class="prod-footer">
+        <div class="prod-price">${p.price}</div>
+        <button class="prod-buy" onclick="buyProduct('${p.title}','${p.price}')">Achte</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterProds(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+function buyProduct(name, price) {
+  showNotif(`🛒 "${name}" ajoute! Peman via MonCash.`);
+}
+
+renderProducts();
+
+// ===== BAR CHART =====
+const months = ['Jan','Fev','Mas','Avr','Me','Jen','Jiy','Out','Sep','Okt','Nov','Des'];
+const earnings = [18,25,32,28,45,52,48,60,72,85,110,152];
+const maxE = Math.max(...earnings);
+const bars = document.getElementById('ecBars');
+const lbls = document.getElementById('ecLabels');
+if(bars) {
+  bars.innerHTML = earnings.map(v => `<div class="ec-bar" style="height:${(v/maxE)*100}%" title="${v}K HTG"></div>`).join('');
+  lbls.innerHTML = months.map(m => `<div class="ec-lbl">${m}</div>`).join('');
+}
+
+// ===== NAVIGATION =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
+  const pg = document.getElementById(id);
+  if(pg) { pg.style.display = id==='home' ? 'flex' : 'block'; pg.classList.add('active'); }
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  const nav = document.getElementById('nav-'+id);
+  if(nav) nav.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+// ===== MODALS =====
+function openModal(id) { document.getElementById('modal-'+id).classList.add('open'); }
+function closeModal(id) { document.getElementById('modal-'+id).classList.remove('open'); }
+document.querySelectorAll('.modal-ov').forEach(m => { m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }); });
+function submitLogin() { showNotif('✅ Koneksyon reyisi!'); closeModal('login'); }
+function submitRegister() { showNotif('🎉 Kont kreye! Byenvini sou KreyolPro!'); closeModal('register'); }
+
+// ===== NOTIFICATION =====
+function showNotif(msg) {
+  const old = document.querySelector('.notif'); if(old) old.remove();
+  const el = document.createElement('div'); el.className='notif'; el.textContent=msg;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 3100);
+}
+
+// ===== CHATBOT AI =====
+let chatOpen = false;
+const quickR = ['📚 Ebook yo','🎓 Cours yo','💰 Pri yo','🤖 Otomatizasyon','📈 Trafik gratis'];
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chat-win');
+  if(chatOpen) { win.classList.add('open'); if(!document.getElementById('chMsgs').children.length) initChat(); }
+  else win.classList.remove('open');
+}
+
+function initChat() {
+  addBot("Bonjou! Mwen se KreyolPro AI 🤖\n\nMwen ka ede ou:\n• Jwenn bon pwodwi pou biznis ou\n• Eksplike estrateji otomatizasyon\n• Konsèy trafik gratis pou Ayiti\n\nKijan mwen ka ede ou jodi a?");
+  document.getElementById('chQuick').innerHTML = quickR.map(q => `<button class="cq" onclick="handleQ('${q}')">${q}</button>`).join('');
+}
+
+function addBot(text) {
+  const msgs = document.getElementById('chMsgs');
+  const time = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const el = document.createElement('div'); el.className='cm bot';
+  el.innerHTML = `${text.replace(/\n/g,'<br>')}<div class="cm-time">${time}</div>`;
+  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight;
+}
+
+function addUser(text) {
+  const msgs = document.getElementById('chMsgs');
+  const time = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const el = document.createElement('div'); el.className='cm user';
+  el.innerHTML = `${text}<div class="cm-time">${time}</div>`;
+  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chMsgs');
+  const el = document.createElement('div'); el.className='cm bot'; el.id='typing';
+  el.innerHTML='<div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping() { const t=document.getElementById('typing'); if(t) t.remove(); }
+
+async function callAI(msg) {
+  const sys = `Ou se asistan KreyolPro — yon platfòm ayisyen pou vann pwodwi dijital (ebook, cours, templates) ak otomatizasyon biznis.
+
+Pwodwi disponib:
+- Ebook Biznis Enlign Ayiti: 2,000 HTG
+- Cours Marketing Digital: 3,500 HTG  
+- Pack 50 Templates Flyer: 1,500 HTG
+- Cours AI pou Biznis: 4,000 HTG
+- Ebook Trafik Gratis: 1,800 HTG
+- Cours Vann Pwodwi Dijital: 2,500 HTG
+
+Peman via MonCash ak Natcash.
+Livrezon otomatik via WhatsApp apre peman.
+
+Reponn an Kreyòl Ayisyen. Sois chalè, pratik, pwofesyonèl. Itilize emoji.`;
+
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:sys, messages:[{role:"user",content:msg}] })
+  });
+  const d = await r.json();
+  return d.content?.[0]?.text || "Désolé, yon erè. Eseye ankò.";
+}
+
+async function handleQ(text) {
+  addUser(text); showTyping();
+  try { const r=await callAI(text); removeTyping(); addBot(r); }
+  catch(e) { removeTyping(); addBot("Pwoblèm koneksyon. Eseye ankò."); }
+}
+
+async function sendChat() {
+  const inp=document.getElementById('ch-inp'); const text=inp.value.trim();
+  if(!text) return; inp.value='';
+  addUser(text); showTyping();
+  try { const r=await callAI(text); removeTyping(); addBot(r); }
+  catch(e) { removeTyping(); addBot("Pwoblèm koneksyon. Eseye ankò."); }
+}
+</script>
+</body>
+</html>
