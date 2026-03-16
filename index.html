@@ -1168,8 +1168,7 @@ Reponn an Kreyòl Ayisyen. Sois chalè, pratik, pwofesyonèl. Itilize emoji.`;
     body:JSON.stringify({ system:sys, messages:[{role:"user",content:msg}] })
   });
   const d = await r.json();
-  return d.content?.[0]?.text || "Désolé, yon erè. Eseye ankò.";
-}
+  return d.choices?.[0]?.message?.content || d.content?.[0]?.text || "Désolé, yon erè. Eseye ankò.";
 
 async function handleQ(text) {
   addUser(text); showTyping();
