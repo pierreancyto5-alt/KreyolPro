@@ -1163,9 +1163,9 @@ Livrezon otomatik via WhatsApp apre peman.
 
 Reponn an Kreyòl Ayisyen. Sois chalè, pratik, pwofesyonèl. Itilize emoji.`;
 
-  const r = await fetch("https://api.anthropic.com/v1/messages", {
+  const r = await fetch("https://chatbot-api.pierreancyto5.workers.dev", {
     method:"POST", headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:sys, messages:[{role:"user",content:msg}] })
+    body:JSON.stringify({ system:sys, messages:[{role:"user",content:msg}] })
   });
   const d = await r.json();
   return d.content?.[0]?.text || "Désolé, yon erè. Eseye ankò.";
